@@ -145,6 +145,7 @@ button {
   flex: 1;
   border-right: 1px solid #ccc;
   padding-right: 10px;
+  position: relative;
 }
 
 .grid-cell:last-child {
@@ -190,4 +191,26 @@ button {
 
 .occupants-list li {
   color: #7b8ab8;
+}
+
+.icon{
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  left: 118px;
+}
+
+.icon.oc{
+  left: 100px;
+  top: -1px;
+}
+
+.icon.to{
+ top: -4px;
+ left: 115px;
+}
+
+.icon.ad{
+  left: 116px;
+  top: -1px;
 }

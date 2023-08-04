@@ -1,5 +1,9 @@
 import React from 'react'
 import Occupants from './occupants';
+import { ReactComponent as PhoneIcon } from '../icons/addresscard.svg';
+import { ReactComponent as Address } from '../icons/addres.svg';
+import { ReactComponent as Occupant } from '../icons/property.svg';
+import { ReactComponent as Town } from '../icons/town.svg';
 
 const Item = (props) => {
     return (
@@ -11,18 +15,22 @@ const Item = (props) => {
               <span className="grid-value">{props.postcode}</span>
             </div>
             <div className="grid-cell">
+              <PhoneIcon className="icon"></PhoneIcon>
               <span className="grid-label">Name:</span>
               <span className="grid-value">{props.name}</span>
             </div>
             <div className="grid-cell">
+              <Address className="icon ad"></Address>  
               <span className="grid-label">Address:</span>
               <span className="grid-value">{props.address}</span>
             </div>
             <div className="grid-cell">
+              <Occupant className="icon oc"></Occupant>  
               <span className="grid-label">Occupants:</span>
               <Occupants occupants={props.occupants}></Occupants>
             </div>
             <div className="grid-cell">
+              <Town className="icon to"></Town>
               <span className="grid-label">Town:</span>
               <span className="grid-value">{props.town}</span>
             </div>
