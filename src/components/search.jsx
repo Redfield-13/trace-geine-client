@@ -22,16 +22,29 @@ const UserTable = ({ data }) => {
 function Search() {
   const [loading,setLoading] = useState(null)
   const [data,setData] = useState([])
+  const [datas,setDatas] = useState([])
+  const [currentPage,setPage] = useState(1)
+  const [startIndex,setStartIndex] = useState(0)
+  const [endIndex,setEndIndex] = useState(10)
+  const increasePage = async()=>{
+    setPage(currentPage+1)
+    setStartIndex((currentPage-1)*10)
+    setEndIndex(currentPage*10)
+  }
+
+  useEffect(() => {
+    setDatas(data.slice(startIndex, endIndex));
+  }, [data, startIndex, endIndex]);
   const searchByPostcode = async ()=>{
     setLoading(true)
     console.log('postcode search......');
     var postcode = document.getElementById("search-01").value
-    var link = 'http://localhost:4000/postcodes?postcode='+postcode
+    var link = 'http://206.189.140.40:4000/postcodes?postcode='+postcode
     console.log("link: "+link);
     fetch(link).then(response => response.json()).then(data =>{
         setData(data)
         setLoading(false)
-        console.log(data);
+        setDatas(data.slice(startIndex,endIndex))
     }).catch(error =>{
         'ERORR FETCHING',error
     })
@@ -40,11 +53,11 @@ function Search() {
     console.log('postcode and address search ');
     var postcode = document.getElementById("search-05").value
     var address = document.getElementById("search-06").value
-    var link = 'http://localhost:4000/postcode&address?postcode='+postcode+'&address='+address
+    var link = 'http://206.189.140.40:4000/postcode&address?postcode='+postcode+'&address='+address
     console.log("link: "+link);
     fetch(link).then(response => response.json()).then(datas =>{
         setData(datas)
-        console.log(datas);
+        setDatas(data.slice(startIndex,endIndex))
     }).catch(error =>{
         'error fetching', error
     })
@@ -58,11 +71,11 @@ function Search() {
     var lastName = document.getElementById("search-03").value
     var name = firstName+' '+lastName
     var town = document.getElementById("search-04").value
-    var link = 'http://localhost:4000/name&town?name='+name+'&town='+town
+    var link = 'http://206.189.140.40:4000/name&town?name='+name+'&town='+town
     console.log("link: "+link);
     fetch(link).then(response => response.json()).then(datas =>{
         setData(datas)
-        console.log(datas);
+        setDatas(data.slice(startIndex,endIndex))
     }).catch(error =>{
         'error fetching', error
     })
@@ -95,18 +108,22 @@ function Search() {
         {loading ? (
                 <p></p>
             ) : (
-                <div className='sp res'>Results: {data.length}</div>
+                <div className='sp res'>Results: {data.length} -   Page: {currentPage}</div>
             ) }
         <div className="results">
             
-            {data.length > 0 ? (
-                data.map((item)=>{
-                    return <Item key={item.id} postcode={item.postcode} name={item.name} address={item.address} occupants={item.occupants} town={item.town}></Item>
+            {datas.length > 0 ? (
+                datas.map((item)=>{
+                  if (item.phone == "") {
+                    item.phone = "Not Availabe"
+                  }
+                    return <Item key={item.id} postcode={item.postcode} name={item.name} address={item.address} occupants={item.occupants} town={item.town} phone={item.phone}></Item>
                 })
             ) : (
                 <p></p>
             )}
         </div>
+        <button onClick={increasePage}>Next</button>
         
     </div>
   )

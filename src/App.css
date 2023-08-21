@@ -197,20 +197,26 @@ button {
   width: 20px;
   height: 20px;
   position: absolute;
-  left: 118px;
+  left: 88px;
 }
 
 .icon.oc{
-  left: 100px;
+  left: 70px;
   top: -1px;
 }
 
 .icon.to{
  top: -4px;
- left: 115px;
+ left: 88px;
 }
 
 .icon.ad{
-  left: 116px;
+  left: 86px;
   top: -1px;
+}
+
+.icon.po{
+  width: 17px;
+  height: 17px;
+  left: 88px;
 }

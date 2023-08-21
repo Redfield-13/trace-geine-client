@@ -4,6 +4,7 @@ import { ReactComponent as PhoneIcon } from '../icons/addresscard.svg';
 import { ReactComponent as Address } from '../icons/addres.svg';
 import { ReactComponent as Occupant } from '../icons/property.svg';
 import { ReactComponent as Town } from '../icons/town.svg';
+import { ReactComponent as Phone } from '../icons/phone.svg';
 
 const Item = (props) => {
     return (
@@ -28,6 +29,11 @@ const Item = (props) => {
               <Occupant className="icon oc"></Occupant>  
               <span className="grid-label">Occupants:</span>
               <Occupants occupants={props.occupants}></Occupants>
+            </div>
+            <div className="grid-cell">
+              <Phone className="icon po"></Phone>
+              <span className="grid-label">Phone:</span>
+              <span className="grid-value">{props.phone}</span>
             </div>
             <div className="grid-cell">
               <Town className="icon to"></Town>
