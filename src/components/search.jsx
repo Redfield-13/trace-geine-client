@@ -24,13 +24,17 @@ function Search() {
   const [data,setData] = useState([])
   const [datas,setDatas] = useState([])
   const [currentPage,setPage] = useState(1)
-  const [startIndex,setStartIndex] = useState(0)
-  const [endIndex,setEndIndex] = useState(10)
-  const increasePage = async()=>{
-    setPage(currentPage+1)
-    setStartIndex((currentPage-1)*10)
-    setEndIndex(currentPage*10)
-  }
+
+  const itemsPerPage = 10;
+
+  const totalPages = Math.ceil(data.length / itemsPerPage); 
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const increasePage = () => {
+    setPage((prevPage) => prevPage + 1);
+  };
 
   useEffect(() => {
     setDatas(data.slice(startIndex, endIndex));
@@ -43,12 +47,32 @@ function Search() {
     console.log("link: "+link);
     fetch(link).then(response => response.json()).then(data =>{
         setData(data)
+        console.log('weeeee goooooooot some sata here: ',data);
         setLoading(false)
         setDatas(data.slice(startIndex,endIndex))
     }).catch(error =>{
-        'ERORR FETCHING',error
+       console.log('ERORR FETCHING',error);
     })
   }
+  
+  const searchByScrapingPostcode = async ()=>{
+    setLoading(true)
+    console.log('postcode search......');
+    var postcode = document.getElementById("search-01").value
+    var link = 'http://localhost:9999/postcode?postcode='+postcode
+    // var link = 'http://206.189.140.40:4000/postcodes?postcode='+postcode
+    console.log("link: "+link);
+    fetch(link).then(response => response.json()).then(data =>{
+        setData(data)
+        data.occupants = JSON.stringify(data.occupants)
+        console.log('weeeee goooooooot some sata here: ',data[0]);
+        setLoading(false)
+        setDatas(data.slice(startIndex,endIndex))
+    }).catch(error =>{
+       console.log('ERORR FETCHING',error);
+    })
+  }
+
   const searchByPostcodeAndAddress = async ()=>{
     console.log('postcode and address search ');
     var postcode = document.getElementById("search-05").value
@@ -59,7 +83,7 @@ function Search() {
         setData(datas)
         setDatas(data.slice(startIndex,endIndex))
     }).catch(error =>{
-        'error fetching', error
+        console.log('error fetching', error)
     })
   
 
@@ -77,7 +101,22 @@ function Search() {
         setData(datas)
         setDatas(data.slice(startIndex,endIndex))
     }).catch(error =>{
-        'error fetching', error
+        console.log('error fetching', error);
+    })
+  }
+
+  const scrapeByNameAndTown = async ()=>{
+    var firstName = document.getElementById("search-02").value
+    var lastName = document.getElementById("search-03").value
+    var town = document.getElementById("search-04").value
+    console.log('name and town scrape');
+    var link = 'http://localhost:9999/town/firstName='+firstName+'&lastName='+lastName+'&town='+town
+    console.log("link: "+link);
+    fetch(link).then(response => response.json()).then(datas =>{
+        setData(datas)
+        setDatas(data.slice(startIndex,endIndex))
+    }).catch(error =>{
+        console.log('error fetching', error);
     })
   }
 
@@ -89,6 +128,7 @@ function Search() {
                 <p className='sp'>Search By Postcode</p>
                 <input id='search-01' type="text" placeholder="Search" />
                 <button className="Sbtn" onClick={searchByPostcode}>Search</button>
+                <button className='Sbtn' onClick={searchByScrapingPostcode}>TEST</button>
             </div>
             <div className="card">
                 <p className='sp'>Search By Name And Town</p>
@@ -96,6 +136,7 @@ function Search() {
                 <input id='search-03'  type="text" placeholder="Enter Last Name" />
                 <input id='search-04'  type="text" placeholder="Enter Town" />
                 <button className="Sbtn" onClick={searchByNameAndTown}>Search</button>
+                <button className='Sbtn' onClick={scrapeByNameAndTown}>TEST</button>
             </div>
             <div className="card">
                 <p className='sp'>Search By Postcode And Address</p>
@@ -114,7 +155,7 @@ function Search() {
             
             {datas.length > 0 ? (
                 datas.map((item)=>{
-                  if (item.phone == "") {
+                  if (item.phone === "") {
                     item.phone = "Not Availabe"
                   }
                     return <Item key={item.id} postcode={item.postcode} name={item.name} address={item.address} occupants={item.occupants} town={item.town} phone={item.phone}></Item>
@@ -123,7 +164,9 @@ function Search() {
                 <p></p>
             )}
         </div>
-        <button onClick={increasePage}>Next</button>
+        {currentPage < totalPages && (
+          <button onClick={increasePage}>Next</button>
+        )}
         
     </div>
   )

@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Occupants = (props) => {
-    console.log(Object.entries(JSON.parse(props["occupants"])));
+    // console.log(Object.entries(JSON.parse(props["occupants"])));
   return (
     <div className="occupants-container">
       <h3 className="occupants-heading"></h3>
